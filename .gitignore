@@ -1,0 +1,7 @@
+node_modules
+dist
+
+src/infra/prisma/migrations/
+
+.env
+docker-compose.override.yml

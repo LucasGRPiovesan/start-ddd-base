@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id          Int     @id @default(autoincrement())
+  uuid        String  @unique @default(uuid())
+  profile     String
+  description String?
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  deleted_at  DateTime?
+  
+  users       User[]  @relation("ProfileToUsers")
+  modulePermission       ModulePermissionProfile[]  @relation("ModulePermissionProfile_Profile")
+
+  @@map("tbl_profile")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  uuid         String   @unique @default(uuid())
+  uuid_profile String
+  name         String
+  email        String   @unique
+  password     String
+  
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  deleted_at  DateTime?
+
+  profile      Profile  @relation("ProfileToUsers", fields: [uuid_profile], references: [uuid])
+
+  @@map("tbl_users")
+}
+
+model Module {
+  id          Int                @id @default(autoincrement())
+  uuid        String             @unique @default(uuid())
+  uuid_module String?            
+  module      String
+  description String?
+
+  created_at  DateTime           @default(now())
+  updated_at  DateTime           @updatedAt
+  deleted_at  DateTime?
+
+  parent      Module?   @relation("ModuleHierarchy", fields: [uuid_module], references: [uuid])
+  children    Module[]  @relation("ModuleHierarchy")
+
+  permissions ModulePermission[] @relation("Module_ModulePermission")
+
+  @@map("tbl_module")
+}
+
+model Permission {
+  id          Int       @id @default(autoincrement())
+  uuid        String    @unique @default(uuid())
+  permission  String
+  label       String
+  description String?
+
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
+
+  modules     ModulePermission[] @relation("Permission_ModulePermission")
+
+  @@map("tbl_permission")
+}
+
+model ModulePermission {
+  id                Int        @id @default(autoincrement())
+  uuid              String     @unique @default(uuid())
+
+  uuid_module       String
+  uuid_permission   String
+
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+  deleted_at        DateTime?
+
+  module            Module     @relation("Module_ModulePermission", fields: [uuid_module], references: [uuid])
+  permission        Permission @relation("Permission_ModulePermission", fields: [uuid_permission], references: [uuid])
+  modulePermission  ModulePermissionProfile[] @relation("ModulePermissionProfile_ModulePermission")
+
+  @@map("tbl_module_permission")
+}
+
+model ModulePermissionProfile {
+  id                        Int        @id @default(autoincrement())
+  uuid                      String     @unique @default(uuid())
+
+  uuid_module_permission    String
+  uuid_profile              String
+  status                    Boolean    @default(true)
+
+  created_at                DateTime   @default(now())
+  updated_at                DateTime   @updatedAt
+  deleted_at                DateTime?
+
+  modulePermission          ModulePermission     @relation("ModulePermissionProfile_ModulePermission", fields: [uuid_module_permission], references: [uuid])
+  profile                   Profile              @relation("ModulePermissionProfile_Profile", fields: [uuid_profile], references: [uuid])
+
+  @@map("tbl_module_permission_profile")
+}
+
