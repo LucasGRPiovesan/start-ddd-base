@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import crypto from "crypto";
 
 export async function seedUsers(prisma: PrismaClient) {
   const users = [

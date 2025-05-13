@@ -7,27 +7,12 @@
       "outDir": "./dist",                      // Especifica o diretório de saída para os arquivos transpilados
       "strict": true,                          // Habilita todas as verificações de tipo estritas
       "esModuleInterop": true,                 // Permite interoperabilidade entre módulos CommonJS e ES Modules
-      "types": ["jest"],
       "forceConsistentCasingInFileNames": true,// Garante consistência no uso de maiúsculas e minúsculas nos nomes de arquivos
       "skipLibCheck": true,                    // Pula a checagem de tipo de arquivos de declaração (.d.ts)
       "resolveJsonModule": true,               // Permite a importação de arquivos JSON como módulos
       "moduleResolution": "node",              // Especifica o algoritmo de resolução de módulos
       "allowSyntheticDefaultImports": true     // Permite importações padrão de módulos sem exportação default
     },
-    "include": ["src/**/*", "tests/use-cases/user/CreateUser.spec.ts"],                   // Inclui todos os arquivos na pasta src
-    "exclude": ["node_modules", "dist"]        // Exclui as pastas node_modules e dist
+    "include": ["src/**/*", "tests/**/*"],                   // Inclui todos os arquivos na pasta src
+    "exclude": ["node_modules", "dist", "docker"]        // Exclui as pastas node_modules e dist
 }
-  
-/* {
-    "compilerOptions": {
-        "sourceMap": true,
-        "outDir": "dist",
-        "rootDir": "src",
-        "strict": true,
-        "lib": ["ESNext"],
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipLibCheck": true
-    },
-    "exclude": ["node_modules", "dist"]
-} */
