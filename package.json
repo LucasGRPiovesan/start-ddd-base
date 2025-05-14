@@ -9,7 +9,7 @@
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:seed": "npx prisma db seed",
-    "prisma:refresh": "powershell -Command \"Remove-Item -Recurse -Force .\\src\\infra\\prisma\\migrations; npx prisma migrate reset --force --skip-seed; npx prisma migrate dev --name init --skip-seed;\"",
+    "prisma:refresh": "rm -rf ./src/infra/prisma/migrations && npx prisma migrate reset --force --skip-seed && npx prisma migrate dev --name init --skip-seed",
     "jest:test": "npx jest"
   },
   "prisma": {
